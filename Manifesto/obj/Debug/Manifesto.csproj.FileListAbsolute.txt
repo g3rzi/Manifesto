@@ -1,0 +1,12 @@
+c:\users\eviatar\documents\visual studio 2015\Projects\Manifesto\Manifesto\bin\Debug\Manifesto.exe.config
+c:\users\eviatar\documents\visual studio 2015\Projects\Manifesto\Manifesto\obj\Debug\Manifesto.csprojResolveAssemblyReference.cache
+c:\users\eviatar\documents\visual studio 2015\Projects\Manifesto\Manifesto\bin\Debug\Manifesto.exe
+c:\users\eviatar\documents\visual studio 2015\Projects\Manifesto\Manifesto\bin\Debug\Manifesto.pdb
+c:\users\eviatar\documents\visual studio 2015\Projects\Manifesto\Manifesto\obj\Debug\Manifesto.exe
+c:\users\eviatar\documents\visual studio 2015\Projects\Manifesto\Manifesto\obj\Debug\Manifesto.pdb
+C:\Users\casper\Desktop\Manifesto\Manifesto\bin\Debug\Manifesto.exe.config
+C:\Users\casper\Desktop\Manifesto\Manifesto\obj\Debug\Manifesto.exe
+C:\Users\casper\Desktop\Manifesto\Manifesto\obj\Debug\Manifesto.pdb
+C:\Users\casper\Desktop\Manifesto\Manifesto\bin\Debug\Manifesto.exe
+C:\Users\casper\Desktop\Manifesto\Manifesto\bin\Debug\Manifesto.pdb
+C:\Users\casper\Desktop\Manifesto\Manifesto\obj\Debug\Manifesto.csprojResolveAssemblyReference.cache
