@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manifesto", "Manifesto\Manifesto.csproj", "{CBACE6F3-B6FC-4DA1-9718-BDB6360E2834}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManifestoGUI", "ManifestoGUI\ManifestoGUI.csproj", "{C4965C31-B851-4A79-9FDB-340B5F327C39}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CBACE6F3-B6FC-4DA1-9718-BDB6360E2834}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBACE6F3-B6FC-4DA1-9718-BDB6360E2834}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBACE6F3-B6FC-4DA1-9718-BDB6360E2834}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBACE6F3-B6FC-4DA1-9718-BDB6360E2834}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4965C31-B851-4A79-9FDB-340B5F327C39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4965C31-B851-4A79-9FDB-340B5F327C39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4965C31-B851-4A79-9FDB-340B5F327C39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4965C31-B851-4A79-9FDB-340B5F327C39}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
