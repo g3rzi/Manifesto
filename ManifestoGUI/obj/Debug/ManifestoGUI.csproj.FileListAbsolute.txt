@@ -1,9 +1,0 @@
-C:\Users\casper\Desktop\Manifesto\ManifestoGUI\bin\Debug\ManifestoGUI.exe.config
-C:\Users\casper\Desktop\Manifesto\ManifestoGUI\bin\Debug\ManifestoGUI.exe
-C:\Users\casper\Desktop\Manifesto\ManifestoGUI\bin\Debug\ManifestoGUI.pdb
-C:\Users\casper\Desktop\Manifesto\ManifestoGUI\obj\Debug\ManifestoGUI.csprojResolveAssemblyReference.cache
-C:\Users\casper\Desktop\Manifesto\ManifestoGUI\obj\Debug\ManifestoGUI.Form1.resources
-C:\Users\casper\Desktop\Manifesto\ManifestoGUI\obj\Debug\ManifestoGUI.Properties.Resources.resources
-C:\Users\casper\Desktop\Manifesto\ManifestoGUI\obj\Debug\ManifestoGUI.csproj.GenerateResource.Cache
-C:\Users\casper\Desktop\Manifesto\ManifestoGUI\obj\Debug\ManifestoGUI.exe
-C:\Users\casper\Desktop\Manifesto\ManifestoGUI\obj\Debug\ManifestoGUI.pdb

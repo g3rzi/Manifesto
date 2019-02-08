@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace Manifesto
 {
+    // https://msdn.microsoft.com/en-us/library/bb756929.aspx
     class ManifestInfo
     {
         private string m_level;
         private string m_uiAccess;
         private string m_dpiAware;
         private string m_autoElevate;
-        
+
         public string Level
         {
             get

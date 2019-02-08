@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -15,9 +16,26 @@ namespace ManifestoGUI
     public partial class Form1 : Form
     {
         private uint numberOfUpdatedFiles;
+        private List<GroupBox> groupBoxesList;
+        
         public Form1()
         {
             InitializeComponent();
+            this.groupBoxesList = getGroupBoxesList();
+            this.comboBoxExtensions.Text = "All Files";
+        }
+        
+        private List<GroupBox> getGroupBoxesList()
+        {
+            List<GroupBox> groupBoxes = new List<GroupBox>();
+            foreach (Control groupControl in panel1.Controls)
+            {
+                if (groupControl is GroupBox)
+                {
+                    groupBoxes.Add((GroupBox)groupControl);
+                }
+            }
+            return groupBoxes;
         }
 
         private void searchButton1_Click(object sender, EventArgs e)
@@ -25,17 +43,22 @@ namespace ManifestoGUI
             bool recursive = false;
             if (checkBoxRecursive.Checked) recursive = true;
 
-            ThreadPool.QueueUserWorkItem(o => search(textBox1.Text, recursive));
+            string extension = "*.*";
+            if (this.comboBoxExtensions.Text != "All Files")
+            {
+                extension = comboBoxExtensions.Text;
+            }
+            ThreadPool.QueueUserWorkItem(o => search(textBox1.Text, recursive, extension));
             //search(textBox1.Text, recursive);
         }
 
         // Original: https://stackoverflow.com/questions/172544/ignore-folders-files-when-directory-getfiles-is-denied-access
         // https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/file-system/how-to-iterate-through-a-directory-tree
-        private void search(string root, bool isRecursive)
+        private void search(string root, bool isRecursive, string extension)
         {
             // Data structure to hold names of subfolders to be
             // examined for files.
-            Stack<string> dirs = new Stack<string>(20);
+            Stack<string> dirs = new Stack<string>(10);
 
             if (!System.IO.Directory.Exists(root))
             {
@@ -46,6 +69,7 @@ namespace ManifestoGUI
             while (dirs.Count > 0)
             {
                 string currentDir = dirs.Pop();
+                updateStatusToolStrip(currentDir);
                 string[] subDirs;
                 try
                 {
@@ -74,7 +98,7 @@ namespace ManifestoGUI
                 string[] files = null;
                 try
                 {
-                    files = System.IO.Directory.GetFiles(currentDir, "*.exe");
+                    files = System.IO.Directory.GetFiles(currentDir, extension);
                 }
 
                 catch (UnauthorizedAccessException e)
@@ -98,7 +122,10 @@ namespace ManifestoGUI
                         ManifestInfo info = Engine.GetManifestInfo(file);
                         if (info != null && (String.Empty != info.Level + info.uiAccess + info.autoElevate + info.dpiAware))
                         {
-                            updateTable(info, file);
+                            if(UserMatchesFilters(info)) { 
+                            //if(isFilteredByCheckboxes(info)){
+                                updateTable(info, file);
+                            }
                         }
                     }
                     catch (System.IO.FileNotFoundException e)
@@ -111,7 +138,7 @@ namespace ManifestoGUI
                     }
                 }
 
-                if(!isRecursive)
+                if (!isRecursive)
                 {
                     break;
                 }
@@ -121,7 +148,114 @@ namespace ManifestoGUI
                 foreach (string str in subDirs)
                     dirs.Push(str);
             }
+
+            this.toolStripStatusLabel1.Text = "Done";
         }
+
+        private delegate void updateStatusToolStripCallBack(string path);
+
+        void updateStatusToolStrip(string path)
+        {
+            if (this.InvokeRequired)
+            {
+                updateStatusToolStripCallBack s = new updateStatusToolStripCallBack(updateStatusToolStrip);
+                this.Invoke(s, new object[] { path });
+            }
+            else
+            {
+                this.toolStripStatusLabel1.Text = "Status: " + path;
+            }
+        }
+
+        bool FieldMatchesFilterGroup(string field, params CheckBox[] group)
+        {
+            return group.All(box => !box.Checked)
+                || group.Any(box => box.Checked && field != null && box.Text.ToLower() == field.ToLower());
+        }
+
+        bool UserMatchesFilters(ManifestInfo info)
+        {
+            return FieldMatchesFilterGroup(info.Level, checkBoxLevelAsInvoker, checkBoxRequireAdministrator, checkBoxhHighestAvailable)
+                && FieldMatchesFilterGroup(info.autoElevate, checkBoxAutoElevateFalse, checkBoxAutoElevateTrue)
+                && FieldMatchesFilterGroup(info.dpiAware, checkBoxDpiAwareFalse, checkBoxDpiAwareTrue)  // there are other types like "Explorer", "per monitor", ...
+                                                                                                        // Can be classified to "others"
+                && FieldMatchesFilterGroup(info.uiAccess, checkBoxUiAccessFalse, checkBoxUiAccessTrue);
+        }
+
+
+        //void countFindingOfInfo(CheckBox checkbox, string infoField, ref int found)
+        //{
+        //    if (checkbox.Checked)
+        //    {
+        //        if (infoField == checkbox.Text)
+        //        {
+        //            found++;
+        //        }
+        //    }
+        //}
+
+        //bool isFilteredByCheckboxes(ManifestInfo info)
+        //{
+        //    bool isAllowed = false;
+
+        //    int shouldBeFound = 0;
+        //    int found = 0;
+
+        //    if (this.checkBoxLevelAsInvoker.Checked ||
+        //        this.checkBoxRequireAdministrator.Checked ||
+        //        this.checkBoxhHighestAvailable.Checked)
+        //    {
+        //        shouldBeFound++;
+        //        if(info.Level != null)
+        //        {
+        //            countFindingOfInfo(this.checkBoxLevelAsInvoker, info.Level, ref found);
+        //            countFindingOfInfo(this.checkBoxRequireAdministrator, info.Level, ref found);
+        //            countFindingOfInfo(this.checkBoxhHighestAvailable, info.Level, ref found);
+        //        }
+        //    }
+
+        //    if (this.checkBoxAutoElevateFalse.Checked ||
+        //        this.checkBoxAutoElevateTrue.Checked)
+        //    {
+        //        shouldBeFound++;
+        //        if (info.autoElevate != null)
+        //        {
+        //            countFindingOfInfo(this.checkBoxAutoElevateFalse, info.autoElevate, ref found);
+        //            countFindingOfInfo(this.checkBoxAutoElevateTrue, info.autoElevate, ref found);
+        //        }
+        //    }
+
+        //    // there are other types like "Explorer", "per monitor", ...
+        //    // Can be classified to "others"
+        //    if (this.checkBoxDpiAwareFalse.Checked ||
+        //        this.checkBoxDpiAwareTrue.Checked)
+        //    {
+        //        shouldBeFound++;
+        //        if (info.dpiAware != null)
+        //        {
+        //            countFindingOfInfo(this.checkBoxDpiAwareFalse, info.dpiAware, ref found);
+        //            countFindingOfInfo(this.checkBoxDpiAwareTrue, info.dpiAware, ref found);
+        //        }
+        //    }
+
+        //    if (this.checkBoxUiAccessFalse.Checked ||
+        //        this.checkBoxUiAccessTrue.Checked)
+        //    {
+        //        shouldBeFound++;
+        //        if(info.uiAccess != null)
+        //        {
+        //            countFindingOfInfo(this.checkBoxUiAccessFalse, info.uiAccess, ref found);
+        //            countFindingOfInfo(this.checkBoxUiAccessTrue, info.uiAccess, ref found);
+        //        }
+        //    }
+
+        //    if (shouldBeFound == found)
+        //    {
+        //        isAllowed = true;
+        //    }
+
+        //    return isAllowed;
+        //}
 
         private delegate void updateTableCallBack(ManifestInfo info, string path);
 
@@ -141,23 +275,22 @@ namespace ManifestoGUI
                 row.Cells[3].Value = info.autoElevate;
                 row.Cells[4].Value = info.dpiAware;
                 dataGridView1.Rows.Add(row);
-                numberOfUpdatedFiles += 1;
-                toolStripStatusLabelTotalRows.Text = "Total Rows: " + numberOfUpdatedFiles;
+                this.numberOfUpdatedFiles += 1;
+                this.toolStripStatusLabelTotalRows.Text = "Total Rows: " + this.numberOfUpdatedFiles;
             }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog browser = new FolderBrowserDialog();
-            OpenFileDialog openFileDialog = new OpenFileDialog();
             if (browser.ShowDialog() == DialogResult.OK)
             {
                 textBox1.Text = browser.SelectedPath;
             }
         }
-
         private void buttonSaveStats_Click(object sender, EventArgs e)
         {
+
             //DataGridViewRowCollection rows = dataGridView1.Rows;
 
             //DataView dv = new DataView(ds.Tables[0], "type = 'business' ", "type Desc", DataViewRowState.CurrentRows);
@@ -171,13 +304,116 @@ namespace ManifestoGUI
             //    {
             //       key += (string)row.Cells[i].Value;
             //    }
-                
+
             //    ////row.Cells[0].Value = path;
             //    ////row.Cells[1].Value = info.Level;
             //    ////row.Cells[2].Value = info.uiAccess;
             //    ////row.Cells[3].Value = info.autoElevate;
             //    ////row.Cells[4].Value = info.dpiAware;
             //}
+        }
+
+        private bool isAllCheckboxesAreChecked()
+        {
+            bool allAreChecked = false;
+            int numOfCheckboxes = 0;
+            int checkedCheckboxes = 0;
+            foreach (GroupBox groupBox in this.groupBoxesList)
+            {
+                foreach (Control c in groupBox.Controls)
+                {
+                    if (c is CheckBox)
+                    {
+                        numOfCheckboxes++;
+                        if (((CheckBox)c).Checked)
+                        {
+                            checkedCheckboxes++;
+                        }
+                    }
+                }
+            }
+
+            if (numOfCheckboxes == checkedCheckboxes)
+            {
+                allAreChecked = true;
+            }
+
+            return allAreChecked;
+        }
+
+        private void checkOrUncheckAll(bool checkAll)
+        {
+            foreach (GroupBox groupBox in this.groupBoxesList)
+            {
+                foreach (Control c in groupBox.Controls)
+                {
+                    if (c is CheckBox)
+                    {
+                        ((CheckBox)c).Checked = checkAll;
+                    }
+                }
+            }
+        }
+
+        private void buttonSelectAll_Click(object sender, EventArgs e)
+        {
+            bool checkAll = true;
+            if (isAllCheckboxesAreChecked())
+            {
+                checkAll = false;
+            }
+
+            checkOrUncheckAll(checkAll);
+        }
+
+        private void buttonClearResults_Click(object sender, EventArgs e)
+        {
+            //this.dataGridView1.DataSource = null;
+            this.dataGridView1.Rows.Clear();
+            this.toolStripStatusLabelTotalRows.Text = "Total Rows: 0";
+            this.numberOfUpdatedFiles = 0;
+        }
+
+        // Taken from https://stackoverflow.com/a/26259909/2153777
+        private void saveDataGridViewToCSV(string filename)
+        {
+            // Choose whether to write header. Use EnableWithoutHeaderText instead to omit header.
+            dataGridView1.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
+            // Select all the cells
+            dataGridView1.SelectAll();
+            // Copy selected cells to DataObject
+            DataObject dataObject = dataGridView1.GetClipboardContent();
+            // Get the text of the DataObject, and serialize it to a file
+            File.WriteAllText(filename, dataObject.GetText(TextDataFormat.CommaSeparatedValue));
+        }
+
+        private void buttonSaveResults_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveDialog = new SaveFileDialog();
+            saveDialog.Title = "Save results as CSV";
+            saveDialog.InitialDirectory = @"c:\";
+            saveDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+            saveDialog.FilterIndex = 2;
+            saveDialog.RestoreDirectory = true;
+            if (saveDialog.ShowDialog() == DialogResult.OK)
+            {
+                saveDataGridViewToCSV(saveDialog.FileName);
+            }
+        }
+
+        private void buttonBrowse_Click_1(object sender, EventArgs e)
+        {
+            FolderBrowserDialog browser = new FolderBrowserDialog();
+            browser.SelectedPath = @"C:\Windows\System32";
+            if (browser.ShowDialog() == DialogResult.OK)
+            {
+                textBox1.Text = browser.SelectedPath;
+            }
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Author: Eviatar Gerzi\nVersion: 1.0", "About");
         }
     }
 }

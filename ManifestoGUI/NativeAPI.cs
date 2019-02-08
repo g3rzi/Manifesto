@@ -28,7 +28,6 @@ namespace Manifesto
         public const uint RT_MANIFEST = 24;
         public const uint CREATEPROCESS_MANIFEST_RESOURCE_ID = 1;
 
-
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr LoadLibraryEx(string lpFileName, IntPtr hReservedNull, LoadLibraryFlags dwFlags);
 
