@@ -10,8 +10,8 @@ This tool provides simple GUI that provide better visuality when searching for m
 # Usage
 
 ## GUI  
-Run the executable and you will get GUI with all the options.
-<img src="https://github.com/g3rzi/Manifesto/blob/assets/manifesto_gui.PNG" width="260">  
+Run the executable and you will get GUI with all the options.  
+<img src="https://github.com/g3rzi/Manifesto/blob/assets/manifesto_gui.PNG" width="600">  
 
 ##  PowerShell
 Import the module
@@ -22,5 +22,5 @@ Run it like that for all the options:
 ```powershell
 Invoke-Manifesto -FolderPath "C:\Windows\system32"
 ```  
-For all the other switches, check the PowerShell code.  
-<img src="https://github.com/g3rzi/Manifesto/blob/assets/manifesto_powershell.PNG" width="260">  
+For all the other switches, check the PowerShell code.   
+<img src="https://github.com/g3rzi/Manifesto/blob/assets/manifesto_powershell.PNG" width="600">  
