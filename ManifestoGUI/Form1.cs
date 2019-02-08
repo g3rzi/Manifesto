@@ -1,14 +1,9 @@
 ﻿using Manifesto;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ManifestoGUI
@@ -182,81 +177,6 @@ namespace ManifestoGUI
                 && FieldMatchesFilterGroup(info.uiAccess, checkBoxUiAccessFalse, checkBoxUiAccessTrue);
         }
 
-
-        //void countFindingOfInfo(CheckBox checkbox, string infoField, ref int found)
-        //{
-        //    if (checkbox.Checked)
-        //    {
-        //        if (infoField == checkbox.Text)
-        //        {
-        //            found++;
-        //        }
-        //    }
-        //}
-
-        //bool isFilteredByCheckboxes(ManifestInfo info)
-        //{
-        //    bool isAllowed = false;
-
-        //    int shouldBeFound = 0;
-        //    int found = 0;
-
-        //    if (this.checkBoxLevelAsInvoker.Checked ||
-        //        this.checkBoxRequireAdministrator.Checked ||
-        //        this.checkBoxhHighestAvailable.Checked)
-        //    {
-        //        shouldBeFound++;
-        //        if(info.Level != null)
-        //        {
-        //            countFindingOfInfo(this.checkBoxLevelAsInvoker, info.Level, ref found);
-        //            countFindingOfInfo(this.checkBoxRequireAdministrator, info.Level, ref found);
-        //            countFindingOfInfo(this.checkBoxhHighestAvailable, info.Level, ref found);
-        //        }
-        //    }
-
-        //    if (this.checkBoxAutoElevateFalse.Checked ||
-        //        this.checkBoxAutoElevateTrue.Checked)
-        //    {
-        //        shouldBeFound++;
-        //        if (info.autoElevate != null)
-        //        {
-        //            countFindingOfInfo(this.checkBoxAutoElevateFalse, info.autoElevate, ref found);
-        //            countFindingOfInfo(this.checkBoxAutoElevateTrue, info.autoElevate, ref found);
-        //        }
-        //    }
-
-        //    // there are other types like "Explorer", "per monitor", ...
-        //    // Can be classified to "others"
-        //    if (this.checkBoxDpiAwareFalse.Checked ||
-        //        this.checkBoxDpiAwareTrue.Checked)
-        //    {
-        //        shouldBeFound++;
-        //        if (info.dpiAware != null)
-        //        {
-        //            countFindingOfInfo(this.checkBoxDpiAwareFalse, info.dpiAware, ref found);
-        //            countFindingOfInfo(this.checkBoxDpiAwareTrue, info.dpiAware, ref found);
-        //        }
-        //    }
-
-        //    if (this.checkBoxUiAccessFalse.Checked ||
-        //        this.checkBoxUiAccessTrue.Checked)
-        //    {
-        //        shouldBeFound++;
-        //        if(info.uiAccess != null)
-        //        {
-        //            countFindingOfInfo(this.checkBoxUiAccessFalse, info.uiAccess, ref found);
-        //            countFindingOfInfo(this.checkBoxUiAccessTrue, info.uiAccess, ref found);
-        //        }
-        //    }
-
-        //    if (shouldBeFound == found)
-        //    {
-        //        isAllowed = true;
-        //    }
-
-        //    return isAllowed;
-        //}
-
         private delegate void updateTableCallBack(ManifestInfo info, string path);
 
         void updateTable(ManifestInfo info, string path)
@@ -278,39 +198,6 @@ namespace ManifestoGUI
                 this.numberOfUpdatedFiles += 1;
                 this.toolStripStatusLabelTotalRows.Text = "Total Rows: " + this.numberOfUpdatedFiles;
             }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog browser = new FolderBrowserDialog();
-            if (browser.ShowDialog() == DialogResult.OK)
-            {
-                textBox1.Text = browser.SelectedPath;
-            }
-        }
-        private void buttonSaveStats_Click(object sender, EventArgs e)
-        {
-
-            //DataGridViewRowCollection rows = dataGridView1.Rows;
-
-            //DataView dv = new DataView(ds.Tables[0], "type = 'business' ", "type Desc", DataViewRowState.CurrentRows);
-            //dataGridView1.DataSource = dv;
-
-            //StringBuilder sb = new StringBuilder();
-            //foreach(DataGridViewRow row in rows)
-            //{
-            //    string key = "";
-            //    for (int i=1; i < 5; i++)
-            //    {
-            //       key += (string)row.Cells[i].Value;
-            //    }
-
-            //    ////row.Cells[0].Value = path;
-            //    ////row.Cells[1].Value = info.Level;
-            //    ////row.Cells[2].Value = info.uiAccess;
-            //    ////row.Cells[3].Value = info.autoElevate;
-            //    ////row.Cells[4].Value = info.dpiAware;
-            //}
         }
 
         private bool isAllCheckboxesAreChecked()
